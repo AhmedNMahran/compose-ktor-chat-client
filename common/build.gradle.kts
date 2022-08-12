@@ -9,6 +9,13 @@ plugins {
 group = "com.github.ahmednmahran"
 version = "1.0-SNAPSHOT"
 
+//tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+//    kotlinOptions.jvmTarget = "1.8"
+//}
+//tasks.named<JavaExec>("run") {
+//    standardInput = System.`in`
+//}
+
 kotlin {
     android()
     jvm("desktop") {
@@ -17,11 +24,18 @@ kotlin {
         }
     }
     sourceSets {
+        val ktorVersion = "2.0.2"
         val commonMain by getting {
             dependencies {
                 api(compose.runtime)
                 api(compose.foundation)
                 api(compose.material)
+                implementation("io.ktor:ktor-client-core:$ktorVersion")
+                implementation("io.ktor:ktor-client-core:$ktorVersion")
+                implementation("io.ktor:ktor-client-cio:$ktorVersion")
+                implementation("io.ktor:ktor-client-websockets:$ktorVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")
             }
         }
         val commonTest by getting {
@@ -33,6 +47,7 @@ kotlin {
             dependencies {
                 api("androidx.appcompat:appcompat:1.2.0")
                 api("androidx.core:core-ktx:1.3.1")
+                implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
             }
         }
         val androidTest by getting {
