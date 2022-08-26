@@ -76,7 +76,7 @@ fun App() {
 
             Column {
 
-                LazyColumn(Modifier.weight(1f).background(Color.LightGray)) {
+                LazyColumn(Modifier.weight(1f).background(MaterialTheme.colors.surface)) {
                     items(items = list, itemContent = { item ->
                         MessageCard(ChatMessage(item,"test"))
 
