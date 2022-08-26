@@ -46,7 +46,7 @@ fun App() {
     var text by remember { mutableStateOf("Send Message!") }
     var sentMessage by remember { mutableStateOf(TextFieldValue("your Message!")) }
     var receivedMessage by remember { mutableStateOf("received") }
-    val list = mutableListOf<String>()
+    val list = remember {  mutableListOf<String>()}
     var chat by mutableStateOf(list)
     val platformName = getPlatformName()
     if (!job.isActive)
@@ -76,10 +76,10 @@ fun App() {
 
     Column {
 
-        LazyColumn(Modifier.weight(1f)) {
-            items(items = chat + listOf("hello","Ahmed", " Salaaaaam"), itemContent = { item ->
+        LazyColumn(Modifier.weight(1f).background(Color.LightGray)) {
+            items(items = list, itemContent = { item ->
                 Card(
-                    modifier = Modifier.width(80.dp).height(30.dp).background(color = Color.Yellow)
+                    modifier = Modifier.fillMaxWidth().height(30.dp).background(color = Color.Yellow)
                 ) {
                     Text(item)
                 }
@@ -88,14 +88,13 @@ fun App() {
         }
         Row (verticalAlignment = Alignment.Bottom){
             OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(0.7f).then(Modifier.padding(30.dp)),
+                modifier = Modifier.fillMaxWidth(0.6f),
                 value = sentMessage,
                 onValueChange = {
                     sentMessage = it
 
                 })
-            Spacer(modifier = Modifier.width(30.dp))
-            Button(modifier = Modifier.height(60.dp),
+            Button(modifier = Modifier.height(60.dp).fillMaxSize(),
                 onClick = {
                     GlobalScope.launch {
                         sendMessage(wsClient, sentMessage.text)
