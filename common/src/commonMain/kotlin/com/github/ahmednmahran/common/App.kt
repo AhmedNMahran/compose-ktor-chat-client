@@ -10,21 +10,18 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
+import com.github.ahmednmahran.common.model.ChatMessage
+import com.github.ahmednmahran.common.ui.MessageCard
 import io.ktor.client.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.http.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
-import kotlinx.coroutines.flow.Flow
+
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
-import kotlin.properties.Delegates
-import kotlin.properties.ObservableProperty
 
 // todo 1 change screen background
 // todo 2 fix message sending logic
@@ -73,68 +70,45 @@ fun App() {
 
     GlobalScope.launch { startChat(wsClient) }
     //region
+    MaterialTheme {
 
-    Column {
+        Surface {
 
-        LazyColumn(Modifier.weight(1f).background(Color.LightGray)) {
-            items(items = list, itemContent = { item ->
-                Card(
-                    modifier = Modifier.fillMaxWidth().height(30.dp).background(color = Color.Yellow)
-                ) {
-                    Text(item)
+            Column {
+
+                LazyColumn(Modifier.weight(1f).background(Color.LightGray)) {
+                    items(items = list, itemContent = { item ->
+                        MessageCard(ChatMessage(item,"test"))
+
+                    })
+                }
+                Row (verticalAlignment = Alignment.Bottom){
+                    OutlinedTextField(
+                        modifier = Modifier.fillMaxWidth(0.6f),
+                        value = sentMessage,
+                        onValueChange = {
+                            sentMessage = it
+
+                        })
+                    Button(modifier = Modifier.height(60.dp).fillMaxSize(),
+                        onClick = {
+                            GlobalScope.launch {
+                                sendMessage(wsClient, sentMessage.text)
+                            }
+                        }) {
+                        Text("Send")
+                    }
                 }
 
-            })
-        }
-        Row (verticalAlignment = Alignment.Bottom){
-            OutlinedTextField(
-                modifier = Modifier.fillMaxWidth(0.6f),
-                value = sentMessage,
-                onValueChange = {
-                    sentMessage = it
-
-                })
-            Button(modifier = Modifier.height(60.dp).fillMaxSize(),
-                onClick = {
-                    GlobalScope.launch {
-                        sendMessage(wsClient, sentMessage.text)
-                    }
-                }) {
-                Text("Send")
             }
         }
-
     }
     //endregion
 
 
-//    Column {
-//        Card {
-//            Text(text = receivedMessage)
-//        }
-//        Row {
-//
-//            Button(onClick = {
-//                text = "Send, ${platformName}"
-//                GlobalScope.launch {
-//                    sendMessage(wsClient, sentMessage.text)
-//                }
-//
-//            }) {
-//                Text(text)
-//            }
-//            OutlinedTextField(
-//                modifier = Modifier.fillMaxWidth(0.7f).then(Modifier.padding(30.dp)),
-//                value = sentMessage,
-//                onValueChange = {
-//                    sentMessage = it
-//
-//                })
-//
-//        }
-//
-//    }
 }
+
+
 
 
 fun receiveFlow(message: String) = flow<String> {
@@ -200,45 +174,3 @@ class WsClient(private val client: HttpClient) {
     }
 }
 
-//suspend fun startChat() {
-//    val client = HttpClient {
-//        install(WebSockets)
-//    }
-//    client.webSocket(method = HttpMethod.Get, host = "10.0.2.2", port = 8080, path = "/chat") {
-//        val messageOutputRoutine = launch { outputMessages() }
-//        val userInputRoutine = launch { inputMessages() }
-//
-//        userInputRoutine.join() // Wait for completion; either "exit" or error
-//        messageOutputRoutine.cancelAndJoin()
-//    }
-//
-//    client.close()
-//    println("Connection closed. Goodbye!")
-//}
-//
-//var received = ""
-//
-//fun DefaultClientWebSocketSession.outputMessages() = flow {
-//    try {
-//        for (message in incoming) {
-//            message as? Frame.Text ?: continue
-//            emit(message.readText())
-//            received = message.readText()+"\n"
-//        }
-//    } catch (e: Exception) {
-//        emit("Error while receiving: " + e.message)
-//    }
-//}
-//
-//suspend fun DefaultClientWebSocketSession.inputMessages() {
-//    while (true) {
-//
-//        if (inputMessage.equals("exit", true)) return
-//        try {
-//            send(inputMessage)
-//        } catch (e: Exception) {
-//            println("Error while sending: " + e.message)
-//            return
-//        }
-//    }
-//}

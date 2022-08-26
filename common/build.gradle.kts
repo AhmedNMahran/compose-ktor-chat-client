@@ -25,11 +25,13 @@ kotlin {
     }
     sourceSets {
         val ktorVersion = "2.0.2"
+        val imageLoaderVersion = "1.1.6"
         val commonMain by getting {
             dependencies {
                 api(compose.runtime)
                 api(compose.foundation)
                 api(compose.material)
+                api(compose.uiTooling)
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
