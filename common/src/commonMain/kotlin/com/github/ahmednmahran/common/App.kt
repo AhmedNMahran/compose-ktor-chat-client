@@ -4,11 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -40,20 +42,35 @@ val job by lazy {
 @Composable
 fun App() {
 
-    var text by remember { mutableStateOf("Send Message!") }
+    var alert by remember { mutableStateOf("") }
     var sentMessage by remember { mutableStateOf(TextFieldValue("your Message!")) }
     var receivedMessage by remember { mutableStateOf("received") }
-    val list = remember {  mutableListOf<String>()}
+    val list = remember {  mutableListOf<ChatMessage>()}
     var chat by mutableStateOf(list)
     val platformName = getPlatformName()
     if (!job.isActive)
         job.start()
 
+    fun extractChatMessage(it: String) {
+        if (it.startsWith("[")) {
+            alert = ""
+            list.add(
+                ChatMessage(
+                    sender = it.substring(1, it.indexOf("]:"))
+                        .replace("]:", ""),
+                    body = it.substring(it.indexOf("]:") + 2, it.lastIndex).trim()
+                )
+            )
+        } else {
+            alert = it
+        }
+    }
+
     suspend fun startChat(wsClient: WsClient) {
         try {
             wsClient.receive {
 //                writeMessage(it)
-                list.add(it)
+                extractChatMessage(it)
                 println("startChat: $chat")
             }
         } catch (e: Exception) {
@@ -73,12 +90,14 @@ fun App() {
     MaterialTheme {
 
         Surface {
-
+            if(alert.isNotBlank()){
+                Alert(alert)
+            }
             Column {
 
                 LazyColumn(Modifier.weight(1f).background(MaterialTheme.colors.surface)) {
                     items(items = list, itemContent = { item ->
-                        MessageCard(ChatMessage(item,"test"))
+                        MessageCard(item)
 
                     })
                 }
@@ -108,29 +127,19 @@ fun App() {
 
 }
 
-
-
-
-fun receiveFlow(message: String) = flow<String> {
-    emit(message)
-}
-
-suspend fun initConnection(wsClient: WsClient) {
-
-    try {
-        wsClient.connect()
-        wsClient.receive {
-            writeMessage(it)
-            receiveFlow(it)
-        }
-    } catch (e: Exception) {
-        if (e is ClosedReceiveChannelException) {
-            writeMessage("Disconnected. ${e.message}.")
-        } else if (e is WebSocketException) {
-            writeMessage("Unable to connect.")
-        }
-        withTimeout(5000) {
-            GlobalScope.launch { initConnection(wsClient) }
+@Composable
+private fun Alert(alert: String) {
+    Card(elevation = 8.dp) {
+        Box(
+            modifier = Modifier.background(MaterialTheme.colors.error).clip(
+                RoundedCornerShape(16.dp)
+            )
+        ) {
+            Text(
+                text = alert,
+                color = Color.White,
+                style = MaterialTheme.typography.body1
+            )
         }
     }
 }
