@@ -6,6 +6,7 @@ import io.ktor.client.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.http.*
 import io.ktor.websocket.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -22,7 +23,7 @@ class ChatRepository(private val host: String = "10.0.2.2"
             install(WebSockets)
         }
     }
-    private val _chatMessage = MutableSharedFlow<ChatMessage>()
+    private val _chatMessage = MutableStateFlow(ChatMessage("",""))
     val chatMessage: SharedFlow<ChatMessage> = _chatMessage
 
     private var _alert = MutableStateFlow("")
@@ -66,8 +67,10 @@ class ChatRepository(private val host: String = "10.0.2.2"
         }
     }
 
-    suspend fun send(message: String) {
-        _session?.send(Frame.Text(message))
+    fun send(message: String) {
+        GlobalScope.launch {
+            _session?.send(Frame.Text(message))
+        }
     }
 
 

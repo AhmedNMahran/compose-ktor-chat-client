@@ -11,10 +11,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import com.github.ahmednmahran.common.App
+import com.github.ahmednmahran.common.domain.ChatRepository
 
 
 fun main() = application {
     Window(onCloseRequest = ::exitApplication) {
-        App()
+        App(ChatRepository(host = "127.0.0.1"))
     }
 }

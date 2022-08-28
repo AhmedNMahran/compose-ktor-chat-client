@@ -33,8 +33,10 @@ fun App(chatRepository: ChatRepository) {
     var sentMessage by remember { mutableStateOf(TextFieldValue("your Message!")) }
     var receivedMessage by remember { mutableStateOf("received") }
     val list = remember {  mutableListOf<ChatMessage>()}
-
-    list.add(chatRepository.chatMessage.collectAsState(ChatMessage("","")).value)
+    chatRepository.chatMessage.collectAsState(ChatMessage("","")).value.let {
+        if(it.body.isNotBlank() && it.sender.isNotBlank())
+            list.add(it)
+    }
 
     //region
     MaterialTheme {
@@ -61,11 +63,9 @@ fun App(chatRepository: ChatRepository) {
                         })
                     Button(modifier = Modifier.height(60.dp).fillMaxSize(),
                         onClick = {
-                            GlobalScope.launch {
-                                sentMessage = textFieldValue
-                                chatRepository.send(sentMessage.text)
-                                textFieldValue = TextFieldValue("")
-                            }
+                            sentMessage = textFieldValue
+                            chatRepository.send(sentMessage.text)
+                            textFieldValue = TextFieldValue("")
                         }) {
                         Text("Send")
                     }
