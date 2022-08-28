@@ -3,10 +3,15 @@ package com.github.ahmednmahran.common
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.runtime.Composable
-import kotlinx.coroutines.runBlocking
+import androidx.compose.ui.window.singleWindowApplication
+import com.github.ahmednmahran.common.domain.ChatRepository
 
 @Preview
 @Composable
 fun AppPreview() {
-    App()
+    App(ChatRepository(host = "127.0.0.1"))
+}
+
+fun main() = singleWindowApplication {
+    App(ChatRepository(host = "127.0.0.1"))
 }
