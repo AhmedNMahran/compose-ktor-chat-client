@@ -3,10 +3,14 @@ package com.github.ahmednmahran.common
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.runtime.Composable
-import kotlinx.coroutines.runBlocking
+import androidx.compose.ui.window.singleWindowApplication
 
 @Preview
 @Composable
 fun AppPreview() {
+    App()
+}
+
+fun main() = singleWindowApplication {
     App()
 }
