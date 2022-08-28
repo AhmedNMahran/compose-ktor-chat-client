@@ -24,7 +24,6 @@ import kotlinx.coroutines.*
 
 
 
-var baseUrl: String? = null
 
 @Composable
 fun App(chatRepository: ChatRepository = ChatRepository()) {
