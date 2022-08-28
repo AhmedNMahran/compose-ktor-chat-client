@@ -15,11 +15,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 
-class ChatRepository(
-    private val client: HttpClient = HttpClient {
-        install(WebSockets)
-    }, private val host: String = "10.0.2.2"
+class ChatRepository(private val host: String = "10.0.2.2"
 ) {
+    private val client: HttpClient by lazy {
+        HttpClient {
+            install(WebSockets)
+        }
+    }
     private val _chatMessage = MutableSharedFlow<ChatMessage>()
     val chatMessage: SharedFlow<ChatMessage> = _chatMessage
 

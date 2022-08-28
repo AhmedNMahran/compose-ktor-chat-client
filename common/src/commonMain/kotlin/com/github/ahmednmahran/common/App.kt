@@ -28,7 +28,7 @@ import kotlinx.coroutines.*
  * created by @author AhmedNMahran
  */
 @Composable
-fun App(chatRepository: ChatRepository = ChatRepository()) {
+fun App(chatRepository: ChatRepository) {
     var alert = chatRepository.alert.collectAsState("")
     var sentMessage by remember { mutableStateOf(TextFieldValue("your Message!")) }
     var receivedMessage by remember { mutableStateOf("received") }
