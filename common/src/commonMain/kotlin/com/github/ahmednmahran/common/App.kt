@@ -15,6 +15,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.github.ahmednmahran.common.domain.ChatRepository
 import com.github.ahmednmahran.common.model.ChatMessage
+import com.github.ahmednmahran.common.ui.Alert
 import com.github.ahmednmahran.common.ui.MessageCard
 import kotlinx.coroutines.*
 
@@ -23,8 +24,9 @@ import kotlinx.coroutines.*
 // todo 3 make message appear using LazyColumn
 
 
-
-
+/**
+ * created by @author AhmedNMahran
+ */
 @Composable
 fun App(chatRepository: ChatRepository = ChatRepository()) {
     var alert = chatRepository.alert.collectAsState("")
@@ -75,22 +77,5 @@ fun App(chatRepository: ChatRepository = ChatRepository()) {
     //endregion
 
 
-}
-
-@Composable
-private fun Alert(alert: String) {
-    Card(elevation = 8.dp) {
-        Box(
-            modifier = Modifier.background(MaterialTheme.colors.error).clip(
-                RoundedCornerShape(16.dp)
-            )
-        ) {
-            Text(
-                text = alert,
-                color = Color.White,
-                style = MaterialTheme.typography.body1
-            )
-        }
-    }
 }
 
