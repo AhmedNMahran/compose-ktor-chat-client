@@ -21,3 +21,4 @@ uses server built in this project https://github.com/AhmedNMahran/ktor-socket-se
 
 ## TODO in version 0.3:
 - fix desktop app not showing chat list
+- add username customization
