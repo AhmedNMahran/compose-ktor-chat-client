@@ -37,7 +37,7 @@ kotlin {
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
                 implementation("io.ktor:ktor-client-websockets:$ktorVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")
+
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
             }
         }

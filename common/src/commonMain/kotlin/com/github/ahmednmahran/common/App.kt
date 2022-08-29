@@ -46,12 +46,14 @@ fun App(chatRepository: ChatRepository) {
                 Alert(alert.value)
             }
             Column {
-
-                LazyColumn(Modifier.weight(1f).background(MaterialTheme.colors.surface)) {
-                    items(items = list, itemContent = { item ->
-                        MessageCard(item)
-                    })
+                if(alert.value.isBlank()){
+                    LazyColumn(Modifier.weight(1f).background(MaterialTheme.colors.surface)) {
+                        items(items = list, itemContent = { item ->
+                            MessageCard(item)
+                        })
+                    }
                 }
+
                 Row (verticalAlignment = Alignment.Bottom){
                     var textFieldValue by remember { mutableStateOf(TextFieldValue("")) }
                     OutlinedTextField(

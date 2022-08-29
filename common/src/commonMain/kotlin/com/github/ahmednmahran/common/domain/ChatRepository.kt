@@ -6,15 +6,12 @@ import io.ktor.client.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.http.*
 import io.ktor.websocket.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeout
 
 class ChatRepository(private val host: String = "10.0.2.2"
 ) {
@@ -24,14 +21,15 @@ class ChatRepository(private val host: String = "10.0.2.2"
         }
     }
     private val _chatMessage = MutableStateFlow(ChatMessage("",""))
-    val chatMessage: SharedFlow<ChatMessage> = _chatMessage
+    val chatMessage: StateFlow<ChatMessage> = _chatMessage
 
     private var _alert = MutableStateFlow("")
     val alert: StateFlow<String> = _alert
 
     private val _job by lazy {
-        GlobalScope.launch {
+        CoroutineScope(Dispatchers.Default).launch {
             connect()
+            startChat()
         }
 
     }
@@ -40,7 +38,6 @@ class ChatRepository(private val host: String = "10.0.2.2"
     init {
         if (!_job.isActive)
             _job.start()
-        GlobalScope.launch { startChat() }
     }
 
     private suspend fun connect() {
@@ -52,7 +49,7 @@ class ChatRepository(private val host: String = "10.0.2.2"
         )
     }
 
-    suspend fun startChat() {
+    private suspend fun startChat() {
         try {
             receive()
         } catch (e: Exception) {
@@ -62,13 +59,13 @@ class ChatRepository(private val host: String = "10.0.2.2"
                 _alert.emit("Unable to connect.")
             }
             withTimeout(5000) {
-                GlobalScope.launch { startChat() }
+                CoroutineScope(Dispatchers.Default).launch { startChat() }
             }
         }
     }
 
     fun send(message: String) {
-        GlobalScope.launch {
+        CoroutineScope(Dispatchers.Default).launch {
             _session?.send(Frame.Text(message))
         }
     }
