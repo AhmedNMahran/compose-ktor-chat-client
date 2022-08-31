@@ -4,6 +4,7 @@ plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
     id("com.android.library")
+    kotlin("plugin.serialization") version "1.4.21"
 }
 
 group = "com.github.ahmednmahran"

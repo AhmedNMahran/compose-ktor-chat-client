@@ -5,6 +5,7 @@ import com.github.ahmednmahran.common.model.ChatMessage
 import io.ktor.client.*
 import io.ktor.client.plugins.websocket.*
 import io.ktor.http.*
+import io.ktor.serialization.kotlinx.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
@@ -12,6 +13,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
 class ChatRepository(private val host: String = "10.0.2.2"
 ) {
@@ -82,15 +85,10 @@ class ChatRepository(private val host: String = "10.0.2.2"
     }
 
     private suspend fun extractChatMessage(it: String) {
-        if (it.startsWith("[")) {
+        println("extract: $it")
+        if (it.startsWith("{")) {
             _alert.emit("")
-            _chatMessage.emit(
-                ChatMessage(
-                    sender = it.substring(1, it.indexOf("]:"))
-                        .replace("]:", ""),
-                    body = it.substring(it.indexOf("]:") + 2, it.lastIndex).trim()
-                )
-            )
+            _chatMessage.emit(Json.decodeFromString(it))
         } else {
             _alert.emit(it)
         }

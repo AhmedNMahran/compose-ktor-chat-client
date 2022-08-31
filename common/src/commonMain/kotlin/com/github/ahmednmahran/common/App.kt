@@ -46,12 +46,10 @@ fun App(chatRepository: ChatRepository) {
                 Alert(alert.value)
             }
             Column {
-                if(alert.value.isBlank()){
-                    LazyColumn(Modifier.weight(1f).background(MaterialTheme.colors.surface)) {
-                        items(items = list, itemContent = { item ->
-                            MessageCard(item)
-                        })
-                    }
+                LazyColumn(Modifier.weight(1f).background(MaterialTheme.colors.surface)) {
+                    items(items = list, itemContent = { item ->
+                        MessageCard(item)
+                    })
                 }
 
                 Row (verticalAlignment = Alignment.Bottom){

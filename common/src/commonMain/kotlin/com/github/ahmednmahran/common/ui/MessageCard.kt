@@ -54,3 +54,4 @@ fun MessageCard(msg: ChatMessage) {
         }
     }
 }
+
