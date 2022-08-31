@@ -19,6 +19,13 @@ uses server built in this project https://github.com/AhmedNMahran/ktor-socket-se
 - try making App() composable stateless and depend on repo flows
 - fix jdk conflict between android and desktop
 
-## TODO in version 0.3:
+## version 0.3:
 - fix desktop app not showing chat list
+- add kotlinx serialization
+- fix message not cleared after sending
+- extract MessageComposer composable
+
+## To-do in version 0.4:
 - add username customization
+- add authentication
+- change message location for different user
