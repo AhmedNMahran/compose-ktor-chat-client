@@ -3,6 +3,7 @@ package com.github.ahmednmahran.common.domain
 
 import com.github.ahmednmahran.common.model.ChatMessage
 import com.github.ahmednmahran.common.model.ChatUser
+import com.github.ahmednmahran.domain.DatabaseRepository
 import io.ktor.client.*
 import io.ktor.client.plugins.auth.*
 import io.ktor.client.plugins.auth.providers.*
@@ -18,14 +19,18 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
-class ChatRepository(private val host: String = "10.0.2.2"
+class ChatRepository(private val chatUser: ChatUser
+= DatabaseRepository.getUsers().random(), private val host: String = "10.0.2.2"
 ) {
     private val client: HttpClient by lazy {
         HttpClient {
             install(Auth){
                 basic {
                     credentials {
-                        BasicAuthCredentials(username = "ahmed", password = "")
+                        BasicAuthCredentials(
+                            username = chatUser.username,
+                            password = chatUser.password
+                        )
                     }
                     realm = "Access to the '/' path"
                 }

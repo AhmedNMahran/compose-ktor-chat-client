@@ -26,6 +26,6 @@ uses server built in this project https://github.com/AhmedNMahran/ktor-socket-se
 - extract MessageComposer composable
 
 ## To-do in version 0.4:
-- add username customization
-- add authentication
+- ~~add username customization~~
+- ~~add authentication~~
 - change message location for different user
