@@ -4,7 +4,11 @@ package com.github.ahmednmahran.common.domain
 import com.github.ahmednmahran.common.model.ChatMessage
 import com.github.ahmednmahran.common.model.ChatUser
 import io.ktor.client.*
+import io.ktor.client.plugins.auth.*
+import io.ktor.client.plugins.auth.providers.*
 import io.ktor.client.plugins.websocket.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.*
@@ -18,6 +22,14 @@ class ChatRepository(private val host: String = "10.0.2.2"
 ) {
     private val client: HttpClient by lazy {
         HttpClient {
+            install(Auth){
+                basic {
+                    credentials {
+                        BasicAuthCredentials(username = "ahmed", password = "")
+                    }
+                    realm = "Access to the '/' path"
+                }
+            }
             install(WebSockets)
         }
     }
@@ -32,6 +44,11 @@ class ChatRepository(private val host: String = "10.0.2.2"
 
     private val _job by lazy {
         CoroutineScope(Dispatchers.Default).launch {
+            val response: HttpResponse = client.post("login") {
+                host = this@ChatRepository.host
+                port = 8080
+            }
+            println(response.bodyAsText())
             connect()
             startChat()
         }
