@@ -25,8 +25,7 @@ kotlin {
         }
     }
     sourceSets {
-        val ktorVersion = "2.0.2"
-        val imageLoaderVersion = "1.1.6"
+        val ktorVersion = "2.1.0"
         val commonMain by getting {
             dependencies {
                 api(compose.runtime)
@@ -34,12 +33,12 @@ kotlin {
                 api(compose.material)
                 api(compose.uiTooling)
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
-                implementation("io.ktor:ktor-client-core:$ktorVersion")
                 implementation("io.ktor:ktor-client-cio:$ktorVersion")
                 implementation("io.ktor:ktor-client-websockets:$ktorVersion")
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
-
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+                implementation("io.ktor:ktor-client-logging:$ktorVersion")
+                implementation("io.ktor:ktor-client-auth:$ktorVersion")
             }
         }
         val commonTest by getting {

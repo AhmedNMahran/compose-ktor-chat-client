@@ -7,13 +7,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.TextFieldValue
 import com.github.ahmednmahran.common.domain.ChatRepository
 import com.github.ahmednmahran.common.model.ChatMessage
 import com.github.ahmednmahran.common.ui.Alert
 import com.github.ahmednmahran.common.ui.MessageCard
 import com.github.ahmednmahran.common.ui.MessageComposer
-import kotlinx.coroutines.*
+import com.github.ahmednmahran.common.ui.Position
+import kotlinx.coroutines.flow.collect
 
 // todo 1 change screen background
 // todo 2 fix message sending logic
@@ -26,7 +26,7 @@ import kotlinx.coroutines.*
 @Composable
 fun App(chatRepository: ChatRepository) {
     var alert = chatRepository.alert.collectAsState("")
-    var user = chatRepository.user.collectAsState(null)
+    val user = chatRepository.user.collectAsState(null)
     var receivedMessage by remember { mutableStateOf("received") }
     val list = remember {  mutableListOf<ChatMessage>()}
     chatRepository.chatMessage.collectAsState(ChatMessage("","")).value.let {
@@ -43,8 +43,13 @@ fun App(chatRepository: ChatRepository) {
             }
             Column {
                 LazyColumn(Modifier.weight(1f).background(MaterialTheme.colors.surface)) {
-                    items(items = list, itemContent = { item ->
-                        MessageCard(item)
+                    items(items = list, itemContent = { chatMessage ->
+                        MessageCard(chatMessage,
+                            if (chatMessage.sender == user.value?.username)
+                                Position.LEFT
+                            else
+                                Position.RIGHT
+                        )
                     })
                 }
                 MessageComposer{

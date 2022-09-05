@@ -3,8 +3,13 @@ package com.github.ahmednmahran.common.domain
 
 import com.github.ahmednmahran.common.model.ChatMessage
 import com.github.ahmednmahran.common.model.ChatUser
+import com.github.ahmednmahran.domain.DatabaseRepository
 import io.ktor.client.*
+import io.ktor.client.plugins.auth.*
+import io.ktor.client.plugins.auth.providers.*
 import io.ktor.client.plugins.websocket.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.websocket.*
 import kotlinx.coroutines.*
@@ -14,10 +19,22 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
-class ChatRepository(private val host: String = "10.0.2.2"
+class ChatRepository(private val chatUser: ChatUser
+= DatabaseRepository.getUsers().random(), private val host: String = "10.0.2.2"
 ) {
     private val client: HttpClient by lazy {
         HttpClient {
+            install(Auth){
+                basic {
+                    credentials {
+                        BasicAuthCredentials(
+                            username = chatUser.username,
+                            password = chatUser.password
+                        )
+                    }
+                    realm = "Access to the '/' path"
+                }
+            }
             install(WebSockets)
         }
     }
@@ -32,6 +49,11 @@ class ChatRepository(private val host: String = "10.0.2.2"
 
     private val _job by lazy {
         CoroutineScope(Dispatchers.Default).launch {
+            val response: HttpResponse = client.post("login") {
+                host = this@ChatRepository.host
+                port = 8080
+            }
+            println(response.bodyAsText())
             connect()
             startChat()
         }
@@ -51,7 +73,7 @@ class ChatRepository(private val host: String = "10.0.2.2"
             port = 8080,
             path = "/chat"
         )
-//        send(Json.encodeToString(ChatUser("AhmedNabil",)))
+        _user.value = chatUser
     }
 
     private suspend fun startChat() {
@@ -88,15 +110,10 @@ class ChatRepository(private val host: String = "10.0.2.2"
     private suspend fun extractChatMessage(it: String) {
         println("extract: $it")
         try{
-            _user.emit(Json.decodeFromString<ChatUser>(it))
-            _alert.emit("Welcome ${_user.value?.username}")
-        }catch (t: Throwable){
-            try{
-                _chatMessage.emit(Json.decodeFromString(it))
-                _alert.emit("")
-            }catch (th: Throwable){
-                _alert.emit(it)
-            }
+            _chatMessage.emit(Json.decodeFromString(it))
+            _alert.emit("")
+        }catch (th: Throwable){
+            _alert.emit(it)
         }
     }
 

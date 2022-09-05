@@ -25,7 +25,8 @@ uses server built in this project https://github.com/AhmedNMahran/ktor-socket-se
 - fix message not cleared after sending
 - extract MessageComposer composable
 
-## To-do in version 0.4:
+## version 0.4:
 - add username customization
 - add authentication
+- fix message composer ui
 - change message location for different user
