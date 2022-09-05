@@ -1,9 +1,6 @@
 package com.github.ahmednmahran.common.ui
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -22,20 +19,20 @@ fun MessageComposer(
     onButtonClick: (String) -> Unit = {}
 ) {
 
-    Row(verticalAlignment = Alignment.Bottom) {
+    Row(verticalAlignment = Alignment.Bottom, modifier = Modifier.height(60.dp)) {
         var sentMessage by remember { mutableStateOf("") }
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth(0.6f),
+            modifier = Modifier.weight(1f).fillMaxHeight(),
             value = sentMessage,
             onValueChange = {
                 sentMessage = it
             })
-        Button(modifier = Modifier.height(60.dp).fillMaxSize(),
+        Button(modifier = Modifier.fillMaxHeight(),
             onClick = {
                 onButtonClick(sentMessage)
                 sentMessage  = ""
             }) {
-            Text("Send")
+            Text(" Send ")
         }
     }
 }
