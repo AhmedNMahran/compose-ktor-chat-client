@@ -73,7 +73,7 @@ class ChatRepository(private val chatUser: ChatUser
             port = 8080,
             path = "/chat"
         )
-//        send(Json.encodeToString(ChatUser("AhmedNabil",)))
+        _user.value = chatUser
     }
 
     private suspend fun startChat() {
@@ -110,15 +110,10 @@ class ChatRepository(private val chatUser: ChatUser
     private suspend fun extractChatMessage(it: String) {
         println("extract: $it")
         try{
-            _user.emit(Json.decodeFromString<ChatUser>(it))
-            _alert.emit("Welcome ${_user.value?.username}")
-        }catch (t: Throwable){
-            try{
-                _chatMessage.emit(Json.decodeFromString(it))
-                _alert.emit("")
-            }catch (th: Throwable){
-                _alert.emit(it)
-            }
+            _chatMessage.emit(Json.decodeFromString(it))
+            _alert.emit("")
+        }catch (th: Throwable){
+            _alert.emit(it)
         }
     }
 
