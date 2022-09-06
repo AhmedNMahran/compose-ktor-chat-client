@@ -1,8 +1,12 @@
 # [Youtube Channel](https://youtube.com/AhmedNMahran) | [Twitter](https://twitter.com/AhmedNMahran)
 # compose-ktor-chat-client
-This is a sample to demonstrate how to use Compose with Ktor Websockets, did it in this session during MENADD https://www.youtube.com/watch?v=QL3Jk_RZqO8
+This is a sample to demonstrate how to use Compose with Ktor Websockets, did it in this [session](https://www.youtube.com/watch?v=QL3Jk_RZqO8) during MENADD
 
-uses server built in this project https://github.com/AhmedNMahran/ktor-socket-server from ktor.io tutorials
+uses server built in [this project](https://github.com/AhmedNMahran/ktor-socket-server)
+
+# Check the video :
+
+[![DEMO VIDEO](https://img.youtube.com/vi/kU8vZPX_rU8/0.jpg)](https://www.youtube.com/watch?v=kU8vZPX_rU8)
 
 # Release notes:
 ## version 0.1:
