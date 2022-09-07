@@ -1,4 +1,6 @@
-# [Youtube Channel](https://youtube.com/AhmedNMahran) | [Twitter](https://twitter.com/AhmedNMahran)
+# [Support The Project on Ko-Fi](https://ko-fi.com/AhmedNMahran) 
+
+## [Youtube Channel](https://youtube.com/AhmedNMahran) | [Twitter](https://twitter.com/AhmedNMahran)
 # compose-ktor-chat-client
 This is a sample to demonstrate how to use Compose with Ktor Websockets, did it in this [session](https://www.youtube.com/watch?v=QL3Jk_RZqO8) during MENADD
 
