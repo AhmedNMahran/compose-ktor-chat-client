@@ -8,7 +8,7 @@ group "com.github.ahmednmahran"
 version "1.0-SNAPSHOT"
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
@@ -17,9 +17,16 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")
     implementation("io.coil-kt:coil-compose:2.2.1")
+    implementation("androidx.compose.runtime:runtime:1.3.0-beta02")
 }
 
 android {
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.2.0"
+    }
     compileSdkVersion(33)
     defaultConfig {
         applicationId = "com.github.ahmednmahran.android"

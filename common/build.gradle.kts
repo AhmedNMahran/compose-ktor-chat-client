@@ -39,6 +39,7 @@ kotlin {
                 implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
                 implementation("io.ktor:ktor-client-logging:$ktorVersion")
                 implementation("io.ktor:ktor-client-auth:$ktorVersion")
+                implementation("io.coil-kt:coil-compose:2.2.1")
             }
         }
         val commonTest by getting {
@@ -51,6 +52,8 @@ kotlin {
                 api("androidx.appcompat:appcompat:1.2.0")
                 api("androidx.core:core-ktx:1.3.1")
                 implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
+                implementation("io.coil-kt:coil-compose:2.2.1")
+                implementation("androidx.compose.runtime:runtime:1.3.0-beta02")
             }
         }
         val androidTest by getting {
@@ -68,6 +71,12 @@ kotlin {
 }
 
 android {
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.2.0"
+    }
     compileSdkVersion(33)
     sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
     defaultConfig {
