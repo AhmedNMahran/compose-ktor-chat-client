@@ -36,3 +36,6 @@ uses server built in [this project](https://github.com/AhmedNMahran/ktor-socket-
 - add authentication
 - fix message composer ui
 - change message location for different user
+
+## version 0.5
+- todo show user profile image

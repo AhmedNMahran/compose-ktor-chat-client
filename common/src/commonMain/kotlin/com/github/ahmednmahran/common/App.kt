@@ -42,6 +42,7 @@ fun App(chatRepository: ChatRepository) {
                 Alert(alert.value)
             }
             Column {
+                ProfileImage()
                 LazyColumn(Modifier.weight(1f).background(MaterialTheme.colors.surface)) {
                     items(items = list, itemContent = { chatMessage ->
                         MessageCard(chatMessage,
