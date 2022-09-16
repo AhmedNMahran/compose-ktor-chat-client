@@ -15,11 +15,6 @@ import com.github.ahmednmahran.common.ui.MessageComposer
 import com.github.ahmednmahran.common.ui.Position
 import kotlinx.coroutines.flow.collect
 
-// todo 1 change screen background
-// todo 2 fix message sending logic
-// todo 3 make message appear using LazyColumn
-
-
 /**
  * created by @author AhmedNMahran
  */
