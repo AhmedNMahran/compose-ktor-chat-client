@@ -9,9 +9,9 @@ import com.github.ahmednmahran.common.domain.ChatRepository
 @Preview
 @Composable
 fun AppPreview() {
-    App(ChatRepository(host = "127.0.0.1"))
+    App(ChatRepository())
 }
 
 fun main() = singleWindowApplication {
-    App(ChatRepository(host = "127.0.0.1"))
+    App(ChatRepository())
 }

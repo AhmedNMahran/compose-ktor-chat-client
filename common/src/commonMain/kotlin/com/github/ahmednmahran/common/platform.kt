@@ -1,3 +1,8 @@
 package com.github.ahmednmahran.common
 
-expect fun getPlatformName(): String
+import androidx.compose.runtime.Composable
+
+expect fun getHost(): String
+
+@Composable
+expect fun ProfileImage()
